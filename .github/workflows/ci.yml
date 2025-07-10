@@ -35,22 +35,22 @@ jobs:
           node-version: '20'
       - name: Install dependencies
         run: npm install
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-      - name: Start PHP server (background)
-        run: php -S 127.0.0.1:8000 -t app &
-      - name: Wait for PHP server
-        run: npx wait-on http://127.0.0.1:8000
-      - name: Start Selenium (background)
+      - name: Set up Docker Compose
         run: |
-          docker run -d -p 4444:4444 --name selenium --shm-size="2g" selenium/standalone-chrome:latest
-          npx wait-on tcp:4444
-      - name: Run Selenium tests
-        run: npm test
-      - name: Stop Selenium
-        run: docker stop selenium && docker rm selenium
+          docker-compose up -d
+      - name: Wait for Selenium
+        run: npx wait-on tcp:4444
+      - name: Wait for PHP
+        run: npx wait-on http://localhost:8000
+      - name: Run Selenium tests in container
+        run: |
+          docker-compose exec -T selenium npm install
+          docker-compose exec -T selenium node /app/tests/test_app.js
+      - name: Docker Compose logs (on failure)
+        if: failure()
+        run: docker-compose logs
+      - name: Tear down Docker Compose
+        run: docker-compose down
 
   approve:
     runs-on: ubuntu-latest
