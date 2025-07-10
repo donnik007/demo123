@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   php:
     image: php:8.2-cli
@@ -15,6 +14,15 @@ services:
       - "4444:4444"
     depends_on:
       - php
+  node:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./:/app
+    depends_on:
+      - php
+      - selenium
+    command: tail -f /dev/null
   node:
     image: node:20
     working_dir: /app
