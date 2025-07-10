@@ -17,12 +17,12 @@ jobs:
           node-version: '20'
       - name: Install dependencies
         run: npm install
-      - name: Set up Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-      - name: Build Docker images
-        run: docker-compose build
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - name: Start PHP server (background)
+        run: php -S 127.0.0.1:8000 -t app &
 
   test:
     runs-on: ubuntu-latest
@@ -35,14 +35,20 @@ jobs:
           node-version: '20'
       - name: Install dependencies
         run: npm install
-      - name: Start containers
-        run: docker-compose up -d
-      - name: Wait for Selenium
-        run: npx wait-on tcp:4444
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - name: Start PHP server (background)
+        run: php -S 127.0.0.1:8000 -t app &
+      - name: Start Selenium (background)
+        run: |
+          docker run -d -p 4444:4444 --name selenium --shm-size="2g" selenium/standalone-chrome:latest
+          npx wait-on tcp:4444
       - name: Run Selenium tests
         run: npm test
-      - name: Stop containers
-        run: docker-compose down
+      - name: Stop Selenium
+        run: docker stop selenium && docker rm selenium
 
   approve:
     runs-on: ubuntu-latest
