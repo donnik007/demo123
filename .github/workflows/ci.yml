@@ -49,10 +49,14 @@ jobs:
     needs: test
     steps:
       - name: Await manual approval before deployment
-        uses: peter-evans/manual-approval@v3
+        uses: trstringer/manual-approval@v1
         with:
-          timeout-minutes: 60
-          approve-label: "Approve Deploy"
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: user1,user2
+          minimum-approvals: 1
+          issue-title: "Manual Approval Required"
+          issue-body: "Please approve or deny the continuation of this workflow."
+          fail-on-denial: true
 
   deploy-onprem:
     name: Deploy On-Premises
