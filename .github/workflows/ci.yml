@@ -44,9 +44,19 @@ jobs:
       - name: Stop containers
         run: docker-compose down
 
+  approve:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Await manual approval before deployment
+        uses: peter-evans/manual-approval@v4
+        with:
+          timeout-minutes: 60
+          approve-label: "Approve Deploy"
+
   deploy-onprem:
     name: Deploy On-Premises
-    needs: build-and-test
+    needs: approve
     runs-on: ubuntu-latest
     steps:
       - name: Placeholder for on-premises deployment
@@ -54,7 +64,7 @@ jobs:
 
   deploy-cloud:
     name: Deploy Cloud
-    needs: build-and-test
+    needs: approve
     runs-on: ubuntu-latest
     steps:
       - name: Azure Login (marked step)
