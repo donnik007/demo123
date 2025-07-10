@@ -46,7 +46,15 @@ jobs:
       - name: Start Selenium (background)
         run: |
           docker run -d -p 4444:4444 --name selenium --shm-size="2g" selenium/standalone-chrome:latest
-          npx wait-on tcp:4444
+      - name: Wait for Selenium to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -s http://127.0.0.1:4444/wd/hub/status | grep -q '"ready":true'; then
+              echo "Selenium is ready!"; break;
+            fi;
+            echo "Waiting for Selenium..."; sleep 2;
+            if [ "$i" -eq 30 ]; then echo "Selenium did not become ready in time"; exit 1; fi
+          done
       - name: Run Selenium tests
         run: npm test
       - name: Stop Selenium
