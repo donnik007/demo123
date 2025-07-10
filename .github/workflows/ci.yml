@@ -61,19 +61,9 @@ jobs:
           issue-body: "Please approve or deny the continuation of this workflow."
           fail-on-denial: true
 
-  onprem-approval-gate:
-    needs: approve
-    environment: dev
-    runs-on: ubuntu-latest
-    steps:
-      - name: Await On-Prem Approval
-        env:
-          ENV_NAME: On-Premises
-        run: echo "Approve for $ENV_NAME"
-
   deploy-onprem:
     name: Deploy On-Premises
-    needs: onprem-approval-gate
+    needs: approve
     environment: dev
     runs-on: ubuntu-latest
     steps:
