@@ -6,7 +6,7 @@ window.onload = function() {
         const userInput = document.getElementById('user-input').value;
         if (userInput) {
             document.getElementById('confirmation-message').style.display = 'block';
-            document.getElementById('confirmation-message').innerText = `Thank you for your input: ${userInput}`;
+            document.getElementById('confirmation-message').innerText = `Thanks you for your input: ${userInput}`;
         }
     };
 };
