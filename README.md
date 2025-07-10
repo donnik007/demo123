@@ -28,4 +28,3 @@ npm test
 - `.github/workflows/deploy.yml`: Deployment jobs (on-premises and cloud)
 
 ---
-This project is ready for a customer demo to showcase GitHub capabilities!
