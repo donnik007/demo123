@@ -1,2 +1,4 @@
 node_modules/
 selenium-debug.log
+app/demo_app.db
+*.db
