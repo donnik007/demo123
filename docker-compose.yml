@@ -25,5 +25,3 @@ services:
       - selenium
     entrypoint: ["/bin/sh", "-c"]
     command: "npm install && npm test"
-    entrypoint: ["/bin/sh", "-c"]
-    command: "npm install && node tests/test_app.js"
