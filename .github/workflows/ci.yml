@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install
+      - name: Build Docker images
+        run: docker-compose build
+      - name: Start containers
+        run: docker-compose up -d
+      - name: Wait for Selenium
+        run: npx wait-on tcp:4444
+      - name: Run Selenium tests
+        run: npm test
+      - name: Stop containers
+        run: docker-compose down
+
+  deploy-onprem:
+    name: Deploy On-Premises
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder for on-premises deployment
+        run: echo "[ONPREM] Deploying to on-premises server..."
+
+  deploy-cloud:
+    name: Deploy Cloud
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Azure Login (marked step)
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Placeholder for cloud deployment
+        run: echo "[CLOUD] Deploying to cloud environment..."

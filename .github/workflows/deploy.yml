@@ -1,0 +1,19 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-onprem:
+    name: Deploy On-Premises
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder for on-premises deployment
+        run: echo "Deploying to on-premises server..."
+
+  deploy-cloud:
+    name: Deploy Cloud
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder for cloud deployment
+        run: echo "Deploying to cloud environment..."
