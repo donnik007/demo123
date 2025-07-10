@@ -15,3 +15,11 @@ services:
       - "4444:4444"
     depends_on:
       - php
+  node:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./:/app
+    depends_on:
+      - php
+      - selenium

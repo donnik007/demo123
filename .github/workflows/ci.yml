@@ -47,10 +47,10 @@ jobs:
         run: npx wait-on tcp:4444
       - name: Wait for PHP
         run: npx wait-on http://localhost:8000
-      - name: Run Selenium tests in container
-        run: |
-          docker-compose exec -T selenium npm install
-          docker-compose exec -T selenium node /app/tests/test_app.js
+      - name: Install Node.js dependencies in node container
+        run: docker-compose exec -T node npm install
+      - name: Run Selenium tests in node container
+        run: docker-compose exec -T node node tests/test_app.js
       - name: Docker Compose logs (on failure)
         if: failure()
         run: docker-compose logs
