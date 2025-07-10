@@ -41,6 +41,8 @@ jobs:
           php-version: '8.2'
       - name: Start PHP server (background)
         run: php -S 127.0.0.1:8000 -t app &
+      - name: Wait for PHP server
+        run: npx wait-on http://127.0.0.1:8000
       - name: Start Selenium (background)
         run: |
           docker run -d -p 4444:4444 --name selenium --shm-size="2g" selenium/standalone-chrome:latest
