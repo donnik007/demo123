@@ -24,6 +24,6 @@ Test output will be shown in the logs. All services (php, selenium, node) run in
 
 ### GitHub Actions
 - `.github/workflows/ci.yml`: Build, test, and teardown (uses Docker Compose)
-- `.github/workflows/deploy.yml`: Deployment jobs (on-premises and cloud)
+- `.github/workflows/deploy.yml`: Deployment jobs (on-premises and cloud)asdasddasd
 
 ---
