@@ -12,29 +12,18 @@ This is a simple demo app with PHP (Apache), JavaScript, Docker, Selenium tests,
 ## Usage
 
 
-### Local Development
-To run the PHP server locally:
+
+### Local Development & CI
+You need Docker and Docker Compose:
 ```bash
-php -S 127.0.0.1:8000 -t app
+docker-compose up --build --abort-on-container-exit
 ```
-Visit http://127.0.0.1:8000
+Visit http://localhost:8000 (PHP app)
 
-### Run Selenium Tests Locally
-You need Docker installed for Selenium Chrome:
-```bash
-# Start Selenium Chrome in Docker
-docker run -d -p 4444:4444 --name selenium --shm-size="2g" selenium/standalone-chrome:latest
-
-# In another terminal, run the tests
-npm install
-npm test
-
-# Stop Selenium after tests
-docker stop selenium && docker rm selenium
-```
+Test output will be shown in the logs. All services (php, selenium, node) run in containers.
 
 ### GitHub Actions
-- `.github/workflows/ci.yml`: Build, test, and teardown (no Docker Compose needed)
+- `.github/workflows/ci.yml`: Build, test, and teardown (uses Docker Compose)
 - `.github/workflows/deploy.yml`: Deployment jobs (on-premises and cloud)
 
 ---

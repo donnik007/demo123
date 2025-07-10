@@ -29,36 +29,18 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Install dependencies
-        run: npm install
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-      - name: Start PHP server (background)
-        run: php -S 127.0.0.1:8000 -t app &
-      - name: Wait for PHP server
-        run: npx wait-on http://127.0.0.1:8000
-      - name: Start Selenium (background)
+      - name: Install Docker Compose
         run: |
-          docker run -d -p 4444:4444 --name selenium --shm-size="2g" selenium/standalone-chrome:latest
-      - name: Wait for Selenium to be ready
-        run: |
-          for i in {1..30}; do
-            if curl -s http://127.0.0.1:4444/wd/hub/status | grep -q '"ready":true'; then
-              echo "Selenium is ready!"; break;
-            fi;
-            echo "Waiting for Selenium..."; sleep 2;
-            if [ "$i" -eq 30 ]; then echo "Selenium did not become ready in time"; exit 1; fi
-          done
-      - name: Run Selenium tests
-        run: npm test
-      - name: Stop Selenium
-        run: docker stop selenium && docker rm selenium
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose version
+      - name: Run all tests in Docker Compose
+        run: docker-compose up --build --abort-on-container-exit
+      - name: Show logs on failure
+        if: failure()
+        run: docker-compose logs
+      - name: Tear down Docker Compose
+        run: docker-compose down -v
 
   approve:
     runs-on: ubuntu-latest
