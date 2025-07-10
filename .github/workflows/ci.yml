@@ -41,13 +41,15 @@ jobs:
         run: docker-compose logs
       - name: Tear down Docker Compose
         run: docker-compose down -v
+      - name: Summarize test results
+        run: echo "All tests completed. Check logs for details."
 
   approve:
     runs-on: ubuntu-latest
     needs: test
     steps:
       - name: Await manual approval before deployment
-        uses: peter-evans/manual-approval@v4
+        uses: peter-evans/manual-approval@v3
         with:
           timeout-minutes: 60
           approve-label: "Approve Deploy"

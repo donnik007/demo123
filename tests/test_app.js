@@ -8,6 +8,15 @@ const {Builder, By, until} = require('selenium-webdriver');
     console.log('Heading:', heading);
     let jsMessage = await driver.findElement(By.id('js-message')).getText();
     console.log('JS Message:', jsMessage);
+
+    // Test form submission
+    await driver.findElement(By.id('user-input')).sendKeys('Test Input');
+    await driver.findElement(By.css('button[type=submit]')).click();
+    let confirmationMessage = await driver.findElement(By.id('confirmation-message')).getText();
+    console.log('Confirmation Message:', confirmationMessage);
+    if (confirmationMessage !== 'Thank you for your input: Test Input') {
+        throw new Error('Form submission test failed');
+    }
   } finally {
     await driver.quit();
   }
