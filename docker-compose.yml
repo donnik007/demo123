@@ -24,4 +24,4 @@ services:
       - php
       - selenium
     entrypoint: ["/bin/sh", "-c"]
-    command: "npm install && npm test"
+    command: ["sh", "-c", "npm install && npm test"]
